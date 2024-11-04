@@ -185,6 +185,7 @@ const updateIdFromParentToClild = (data: DataItem, newId: string, oldId: string)
       const item = items.value.get(oldId + '.' + (i).toString());
       changeItemId(oldId + '.' + (i).toString(), string)
       if (item) {
+        item.parent = newId
         updateIdFromParentToClild({ ...item }, string, oldId + '.' + (i).toString())
       }
     }
