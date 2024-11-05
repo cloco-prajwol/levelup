@@ -18,10 +18,10 @@ const initialItems: DataItem[] = [
     id: '1',
     task: 'task 1',
     hrs: 1,
-    price: 23268,
-    discount: 2,
-    amount: 3,
-    comment: 'adsdvsdv sdffas',
+    price: 4000,
+    discount: 1,
+    amount: 3500,
+    comment: 'test 1',
     parent: "",
     child: 0,
   },
@@ -29,10 +29,10 @@ const initialItems: DataItem[] = [
     id: '2',
     task: 'task 2',
     hrs: 1,
-    price: 22343,
-    discount: 2,
-    amount: 3,
-    comment: 'adf sdfs as',
+    price: 1298,
+    discount: 7,
+    amount: 1012,
+    comment: 'test 2',
     parent: "",
     child: 0,
   },
@@ -40,10 +40,10 @@ const initialItems: DataItem[] = [
     id: '3',
     task: 'task 3',
     hrs: 1,
-    price: 2353,
+    price: 4034,
     discount: 2,
-    amount: 3,
-    comment: 'adas da fas',
+    amount: 3231,
+    comment: 'test 3',
     parent: "",
     child: 0,
   },
@@ -51,10 +51,10 @@ const initialItems: DataItem[] = [
     id: '4',
     task: 'task 4',
     hrs: 1,
-    price: 212,
-    discount: 2,
-    amount: 3,
-    comment: 'adsd fas',
+    price: 300,
+    discount: 1,
+    amount: 150,
+    comment: 'test 4',
     parent: "",
     child: 0,
   },
@@ -62,10 +62,10 @@ const initialItems: DataItem[] = [
     id: '5',
     task: 'task 5',
     hrs: 1,
-    price: 2323,
-    discount: 2,
-    amount: 3,
-    comment: 'adfasda as',
+    price: 2000,
+    discount: 50,
+    amount: 1000,
+    comment: 'test 5',
     parent: "",
     child: 0,
   },
@@ -73,10 +73,10 @@ const initialItems: DataItem[] = [
     id: '6',
     task: 'task 6',
     hrs: 1,
-    price: 233,
-    discount: 2,
-    amount: 3,
-    comment: 'adfa s',
+    price: 700,
+    discount: 1,
+    amount: 600,
+    comment: 'test 6',
     parent: "",
     child: 0,
   }
@@ -149,7 +149,7 @@ const getHeader = (data: DataItem) => {
   let amt = data.amount
   let payload:ParentHeaderData = {title,amt}
   if(data){
-     payload = getSendDataToParent(clone,{title,amt})
+     payload = getSendDataToParent(clone,{title,amt},1)
   }
   clone.task = payload.title
   clone.id = '-'
@@ -158,17 +158,17 @@ const getHeader = (data: DataItem) => {
 
 }
 
-const getSendDataToParent = (data:DataItem,payload:ParentHeaderData) =>{
+const getSendDataToParent = (data:DataItem,payload:ParentHeaderData,level:number) =>{
   for (let i = 1; i <= data.child; i++) {    
     let string = data.id + '.' + (i).toString();
     const item = items.value.get(string);
     if (item) {
-      if(data.id.length <= 2){
+      if(level <= 1){
         payload.title += ',' + item.task
       }
       payload.amt += item.amount;
       if(item.child> 0){
-        getSendDataToParent({ ...item },payload)
+        getSendDataToParent({ ...item },payload,level+1)
       }
     }
   }
@@ -228,6 +228,7 @@ const handelSort = (payload: SortPayload) => {
   }
 }
 const isHeader = (data: DataItem) => {
+  return true
   if (data.child > 0) {
     if (data.id.length == 1) {
       return true
